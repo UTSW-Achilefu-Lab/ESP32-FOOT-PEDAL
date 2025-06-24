@@ -279,3 +279,4 @@ X: -00343   Y: 000183   | |o|
      |            +---------- Y relative coordinate of the cursor 
      +----------------------- X relative coordinate of the cursor 
 ```
+# ESP32-FOOT-PEDAL
