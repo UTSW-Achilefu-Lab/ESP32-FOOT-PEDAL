@@ -213,44 +213,6 @@ void ble_hid_demo_task_mouse(void *pvParameters)
 
 
 
-const unsigned char keyboardReportMap[] = { //7 bytes input (modifiers, resrvd, keys*5), 1 byte output
-    0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
-    0x09, 0x06,        // Usage (Keyboard)
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x01,        //   Report ID (1)
-    0x05, 0x07,        //   Usage Page (Kbrd/Keypad)
-    0x19, 0xE0,        //   Usage Minimum (0xE0)
-    0x29, 0xE7,        //   Usage Maximum (0xE7)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x25, 0x01,        //   Logical Maximum (1)
-    0x75, 0x01,        //   Report Size (1)
-    0x95, 0x08,        //   Report Count (8)
-    0x81, 0x02,        //   Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0x95, 0x01,        //   Report Count (1)
-    0x75, 0x08,        //   Report Size (8)
-    0x81, 0x03,        //   Input (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0x95, 0x05,        //   Report Count (5)
-    0x75, 0x01,        //   Report Size (1)
-    0x05, 0x08,        //   Usage Page (LEDs)
-    0x19, 0x01,        //   Usage Minimum (Num Lock)
-    0x29, 0x05,        //   Usage Maximum (Kana)
-    0x91, 0x02,        //   Output (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-    0x95, 0x01,        //   Report Count (1)
-    0x75, 0x03,        //   Report Size (3)
-    0x91, 0x03,        //   Output (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-    0x95, 0x05,        //   Report Count (5)
-    0x75, 0x08,        //   Report Size (8)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x25, 0x65,        //   Logical Maximum (101)
-    0x05, 0x07,        //   Usage Page (Kbrd/Keypad)
-    0x19, 0x00,        //   Usage Minimum (0x00)
-    0x29, 0x65,        //   Usage Maximum (0x65)
-    0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0xC0,              // End Collection
-
-    // 65 bytes
-};
-
 static void char_to_code(uint8_t *buffer, char ch)
 {
 	// Check if lower or upper case
@@ -282,42 +244,6 @@ static void char_to_code(uint8_t *buffer, char ch)
 			buffer[2] = (uint8_t)(30 + (ch - '1'));
 		}
 	}
-	else // not a letter nor a number
-	{
-		switch(ch)
-		{
-            CASE(' ', 0, USB_HID_SPACE);
-			CASE('.', 0,USB_HID_DOT);
-            CASE('\n', 0, USB_HID_NEWLINE);
-			CASE('?', USB_HID_MODIFIER_LEFT_SHIFT, USB_HID_FSLASH);
-			CASE('/', 0 ,USB_HID_FSLASH);
-			CASE('\\', 0, USB_HID_BSLASH);
-			CASE('|', USB_HID_MODIFIER_LEFT_SHIFT, USB_HID_BSLASH);
-			CASE(',', 0, USB_HID_COMMA);
-			CASE('<', USB_HID_MODIFIER_LEFT_SHIFT, USB_HID_COMMA);
-			CASE('>', USB_HID_MODIFIER_LEFT_SHIFT, USB_HID_COMMA);
-			CASE('@', USB_HID_MODIFIER_LEFT_SHIFT, 31);
-			CASE('!', USB_HID_MODIFIER_LEFT_SHIFT, 30);
-			CASE('#', USB_HID_MODIFIER_LEFT_SHIFT, 32);
-			CASE('$', USB_HID_MODIFIER_LEFT_SHIFT, 33);
-			CASE('%', USB_HID_MODIFIER_LEFT_SHIFT, 34);
-			CASE('^', USB_HID_MODIFIER_LEFT_SHIFT,35);
-			CASE('&', USB_HID_MODIFIER_LEFT_SHIFT, 36);
-			CASE('*', USB_HID_MODIFIER_LEFT_SHIFT, 37);
-			CASE('(', USB_HID_MODIFIER_LEFT_SHIFT, 38);
-			CASE(')', USB_HID_MODIFIER_LEFT_SHIFT, 39);
-			CASE('-', 0, 0x2D);
-			CASE('_', USB_HID_MODIFIER_LEFT_SHIFT, 0x2D);
-			CASE('=', 0, 0x2E);
-			CASE('+', USB_HID_MODIFIER_LEFT_SHIFT, 39);
-			CASE(8, 0, 0x2A); // backspace
-			CASE('\t', 0, 0x2B);
-			default:
-				buffer[0] = 0;
-				buffer[2] = 0;
-		}
-	}
-}
 
 void send_keyboard(char c)
 {
@@ -461,79 +387,6 @@ static esp_hid_device_config_t ble_hid_config = {
 #define HID_CC_IN_RPT_LEN       2   // Consumer Control input report Len
 void esp_hidd_send_consumer_value(uint8_t key_cmd, bool key_pressed)
 {
-    uint8_t buffer[HID_CC_IN_RPT_LEN] = {0, 0};
-    if (key_pressed) {
-        switch (key_cmd) {
-        case HID_CONSUMER_CHANNEL_UP:
-            HID_CC_RPT_SET_CHANNEL(buffer, HID_CC_RPT_CHANNEL_UP);
-            break;
-
-        case HID_CONSUMER_CHANNEL_DOWN:
-            HID_CC_RPT_SET_CHANNEL(buffer, HID_CC_RPT_CHANNEL_DOWN);
-            break;
-
-        case HID_CONSUMER_VOLUME_UP:
-            HID_CC_RPT_SET_VOLUME_UP(buffer);
-            break;
-
-        case HID_CONSUMER_VOLUME_DOWN:
-            HID_CC_RPT_SET_VOLUME_DOWN(buffer);
-            break;
-
-        case HID_CONSUMER_MUTE:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_MUTE);
-            break;
-
-        case HID_CONSUMER_POWER:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_POWER);
-            break;
-
-        case HID_CONSUMER_RECALL_LAST:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_LAST);
-            break;
-
-        case HID_CONSUMER_ASSIGN_SEL:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_ASSIGN_SEL);
-            break;
-
-        case HID_CONSUMER_PLAY:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_PLAY);
-            break;
-
-        case HID_CONSUMER_PAUSE:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_PAUSE);
-            break;
-
-        case HID_CONSUMER_RECORD:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_RECORD);
-            break;
-
-        case HID_CONSUMER_FAST_FORWARD:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_FAST_FWD);
-            break;
-
-        case HID_CONSUMER_REWIND:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_REWIND);
-            break;
-
-        case HID_CONSUMER_SCAN_NEXT_TRK:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_SCAN_NEXT_TRK);
-            break;
-
-        case HID_CONSUMER_SCAN_PREV_TRK:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_SCAN_PREV_TRK);
-            break;
-
-        case HID_CONSUMER_STOP:
-            HID_CC_RPT_SET_BUTTON(buffer, HID_CC_RPT_STOP);
-            break;
-
-        default:
-            break;
-        }
-    }
-    esp_hidd_dev_input_set(s_ble_hid_param.hid_dev, 0, HID_RPT_ID_CC_IN, buffer, HID_CC_IN_RPT_LEN);
-    return;
 }
 
 #if !CONFIG_BT_NIMBLE_ENABLED || CONFIG_EXAMPLE_HID_DEVICE_ROLE == 1
@@ -683,24 +536,6 @@ const unsigned char mouseReportMap[] = {
 
     0xc0,                          //   END_COLLECTION
     0xc0                           // END_COLLECTION
-};
-
-static esp_hid_raw_report_map_t bt_report_maps[] = {
-    {
-        .data = mouseReportMap,
-        .len = sizeof(mouseReportMap)
-    },
-};
-
-static esp_hid_device_config_t bt_hid_config = {
-    .vendor_id          = 0x16C0,
-    .product_id         = 0x05DF,
-    .version            = 0x0100,
-    .device_name        = "ESP BT HID1",
-    .manufacturer_name  = "Espressif",
-    .serial_number      = "1234567890",
-    .report_maps        = bt_report_maps,
-    .report_maps_len    = 1
 };
 
 // send the buttons, change in x, and change in y
@@ -856,24 +691,6 @@ static void esp_sdp_cb(esp_sdp_cb_event_t event, esp_sdp_cb_param_t *param)
                 .primary_record   = true,
             };
             esp_sdp_create_record((esp_bluetooth_sdp_record_t *)&dip_record);
-        }
-        break;
-    case ESP_SDP_DEINIT_EVT:
-        ESP_LOGI(TAG, "ESP_SDP_DEINIT_EVT: status:%d", param->deinit.status);
-        break;
-    case ESP_SDP_SEARCH_COMP_EVT:
-        ESP_LOGI(TAG, "ESP_SDP_SEARCH_COMP_EVT: status:%d", param->search.status);
-        break;
-    case ESP_SDP_CREATE_RECORD_COMP_EVT:
-        ESP_LOGI(TAG, "ESP_SDP_CREATE_RECORD_COMP_EVT: status:%d, handle:0x%x", param->create_record.status,
-                 param->create_record.record_handle);
-        break;
-    case ESP_SDP_REMOVE_RECORD_COMP_EVT:
-        ESP_LOGI(TAG, "ESP_SDP_REMOVE_RECORD_COMP_EVT: status:%d", param->remove_record.status);
-        break;
-    default:
-        break;
-    }
 }
 #endif /* CONFIG_BT_SDP_COMMON_ENABLED */
 
