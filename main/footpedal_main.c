@@ -90,42 +90,10 @@ void send_mouse(uint8_t buttons, char dx, char dy, char wheel)
 
 void ble_hid_demo_task_mouse(void *pvParameters)
 {
-    static const char* help_string = "########################################################################\n"\
-    "BT hid mouse demo usage:\n"\
-    "This auto clicks the left, right, and mouse wheel buttons\n"\
-    "########################################################################\n";
-    printf("%s\n", help_string);
-
-    int i = 0;
-
     const TickType_t delay = 1000 / portTICK_PERIOD_MS;
-    const TickType_t delaySmall = 10 / portTICK_PERIOD_MS;
-
     while (1) {
-        // FIXME: leave this loop empty (except a delay)
-        // Or never start it
-
-        if ( i == 0 ) {
-            // left
-            ESP_LOGI("main task", "LEFT CLICK\n");
-            send_mouse(1, 0, 0, 0);
-        } else if ( i == 1 ) {
-            // right
-            ESP_LOGI("main task", "RIGHT CLICK\n");
-            send_mouse(2, 0, 0, 0);
-        } else if ( i == 2 ) {
-            // middle
-            ESP_LOGI("main task", "MIDDLE CLICK\n");
-            send_mouse(4, 0, 0, 0);
-        }
-
-        i += 1;
-        if (i == 3) i = 0;
-
-        vTaskDelay(delaySmall);
-        ESP_LOGI("main task", "RELEASE");
-        send_mouse(0, 0, 0, 0);
-
+        // Waiting for input (e.g., from pedal or other event trigger)
+        ESP_LOGI("LOOP", "hopefully this works");
         vTaskDelay(delay);
     }
 }
@@ -137,10 +105,9 @@ static esp_hid_raw_report_map_t ble_report_map[] = {
     },
 };
 
-// FIXME: set vendor and product id to an available one
 static esp_hid_device_config_t ble_hid_config = {
-    .vendor_id          = 0x16C0,
-    .product_id         = 0x05DF,
+    .vendor_id          = 0x1234,
+    .product_id         = 0x5678,
     .version            = 0x0001,
     .device_name        = "cvg-mouse",
     .manufacturer_name  = "UT Southwestern",
