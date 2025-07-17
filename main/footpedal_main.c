@@ -1,7 +1,8 @@
 /*
  * Modified esp_hid_device example
- * June 2025 - Ian Zurutuza
- *
+ * Modified hid_host_example
+ * Combined two codes to create a working emulator for a FootPedal to have Mouse clicks
+ * June 2025 - Ian Zurutuza, Brian Blasi
  * SPDX-FileCopyrightText: 2021-2024 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Unlicense OR CC0-1.0
@@ -32,13 +33,6 @@
 #include "portmacro.h"
 
 static const char *TAG = "HID_DEV_DEMO";
-
-
-/*
- * SPDX-FileCopyrightText: 2022-2023 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: Unlicense OR CC0-1.0
- */
 
 #include <stdbool.h>
 #include <unistd.h>
@@ -226,9 +220,9 @@ static void key_event_callback(key_event_t *key_event)
                                   key_event->key_code, &key_char)) {
 
             hid_keyboard_print_char(key_char);
-
-        // double check we are connected
-        //then sendmouse
+//This is what each button is
+//LEFT CLICK = a, MIDDLE CLICK = b, RIGHT CLICK = c
+//This will not have a loop
         switch (key_char){
             case 'a':
                 send_mouse(1,0,0,0);
@@ -243,6 +237,7 @@ static void key_event_callback(key_event_t *key_event)
                  break;
             }
         }
+//This will make it not loop
     }else if (KEY_STATE_RELEASED == key_event->state){
         send_mouse(0,0,0,0);
     }
@@ -339,9 +334,7 @@ static void hid_host_mouse_report_callback(const uint8_t *const data, const int 
 
 /**
  * @brief USB HID Host Generic Interface report callback handler
- *
  * 'generic' means anything else than mouse or keyboard
- *
  * @param[in] data    Pointer to input report data buffer
  * @param[in] length  Length of input report data buffer
  */
