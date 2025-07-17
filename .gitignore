@@ -1,0 +1,7 @@
+sdkconfig
+sdkconfig.old
+build/*
+
+#clangd
+compile_commands.json
+.cache/*
