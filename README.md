@@ -1,10 +1,22 @@
 # CVG Footpedal
 
-This device transforms a usb footpedal into a wireless (bluetooth) mouse.
-The usb footpedal reports as a keyboard with keys: ["a", "b", "c"]).
-The device communicates with the keyboard and when connected to a
-bluetooth host identifies as an HID compliant mouse sends pedal presses
-as mouse clicks (left, middle, and right).
+To ensure hands-free usage of the cvg augment reality surgical aid, we fabricated a cheap (~$80), wireless footpedal to control the system's application. Many surgeons are familiar with footpedal controls. USB connected footpedals are cheap (~$40) and available from many retailors. However, using a wired device in the operating theater creates a tripping hazard. To transform a wired footpedal into a wireless one, we utilized the esp32-s3-otg-usb development board. This specific developement board was choosen because several integrated peripherals additional to the esp32s3 system on a chip's integrated bluetooth and usb transceiver. Specifically, the battery charge controller, buck converter (battery to 3.3V), and boost converter (battery to 5V). The LCD Screen that comes with this dev kit is removed.
+
+Software written for the esp32s3 first enables bluetooth (Espressif's port of Apache NimBLE) then waits for connection to a previously paired or new device.
+Once wirelessly connected, the esp32 identifies itself as a HID-compliant mouse and power to the connected usb footpedal is enabled. This system on a chip communicates with the footpedal converting any inputs (keys: 'a', 'b', and 'c') into mouse clicks (left, middle, and right) which are wireless sent to the Raspberry Pi CM4 running the cancer vision goggles. 
+
+No software modification is required for the Cancer Vision Goggle application.
+
+|   what   |   why   |   $$$   |   link   |
+| --- | --- | --- | --- | 
+| usb footpedal | hands free input device medical stafff are familar with | ~$40 | [https://www.amazon.com/Programmable-Multifunctional-Ergonomic-Equipment-photoelectric/dp/B0B4SP6KCF](https://www.amazon.com/Programmable-Multifunctional-Ergonomic-Equipment-photoelectric/dp/B0B4SP6KCF) |
+| microcontroller | integrates required peripherals, cheap | $32.45 | [https://www.digikey.com/en/products/detail/espressif-systems/ESP32-S3-USB-OTG/15822449](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-S3-USB-OTG/15822449) |
+| Single cell Li-Ion battery | device power | $9.95 | [https://www.adafruit.com/product/258](https://www.adafruit.com/product/258) | 
+| 3D printed enclosure | device protection | - | n/a |
+
+> Note: Most usb input devices available today do not require a specific driver, but conform to the Human Interface Device (HID) Standard introduced in the mid 1990s.
+The usb footpedal used in this project is no different and identifies itself as an HID-compliant keyboard (but it only has three keys ('a', 'b', and 'c')).
+
 
 ## Device Setup
 
