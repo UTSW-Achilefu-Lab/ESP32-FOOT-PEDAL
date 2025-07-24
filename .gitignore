@@ -1,6 +1,9 @@
+# build atrifacts
 sdkconfig
 sdkconfig.old
 build/*
+managed_components/
+dependencies.lock
 
 #clangd
 compile_commands.json
