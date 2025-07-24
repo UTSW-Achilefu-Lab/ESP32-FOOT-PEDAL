@@ -1,4 +1,8 @@
-/*
+/* esp_hid_gap.c 
+ *
+ * modified from esp-idf bluetooth device example, unused functions removed
+ * Copyright (C) 2025 Ian Zurutuza
+ *
  * SPDX-FileCopyrightText: 2021-2024 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Unlicense OR CC0-1.0
