@@ -10,8 +10,6 @@ as mouse clicks (left, middle, and right).
 
 ### Software Required
 
-- **TODO: link to esp-idf setup**
-
 > See the [Getting Started Guide](https://idf.espressif.com/) for full
 steps to configure and use ESP-IDF to build projects.
 
@@ -19,10 +17,13 @@ steps to configure and use ESP-IDF to build projects.
 
 - ESP32 SoC DEV BOARD [ESP32-S3-USB-OTG](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-usb-otg/index.html)
 - A micro-usb cable for power supply and programming
-- **TODO: all the rest of the components required**
 
-**How much does it cost?**
-bill of materials
+| Components             | Functions                                                                            | Cost   | Purchase Link                                                                                                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| USB Foot Pedal         | A hands-free input device that medical staff are familiar with                       | ~$40   | [https://www.amazon.com/Programmable-Multifunctional-Ergonomic-Equipment-photoelectric/dp/B0B4SP6KCF](https://www.amazon.com/Programmable-Multifunctional-Ergonomic-Equipment-photoelectric/dp/B0B4SP6KCF) |
+| ESP32-S3-USB-OTG           | Microcontroller with integrated peripherals for USB host, BLE, and battery charging. | $32.45 | [https://www.digikey.com/en/products/detail/espressif-systems/ESP32-S3-USB-OTG/15822449](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-S3-USB-OTG/15822449)                           |
+| Li-Ion Polymer battery | 3.7V, 1200mAh battery to power the device                                            | $9.95  | [https://www.adafruit.com/product/258](https://www.adafruit.com/product/258)                                                                                                                               |
+| 3D printed enclosure   | device protection                                                                    | \-     | n/a                                                                                                                                                                                                        |
 
 ### TODO: Assembly
 
@@ -53,6 +54,7 @@ To fix this, please set CONFIG_BT_NIMBLE_SM_LVL to value 2.
 iOS needs Authenticated Pairing with Encryption to show up the pop ups.
 
 ## Example Output
+### TODO: update with current debug log
 
 ```
 I (353) BLE_INIT: Using main XTAL as clock source
